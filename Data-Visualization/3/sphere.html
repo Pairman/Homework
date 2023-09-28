@@ -28,6 +28,8 @@
 	option = {
 		backgroundColor: '#060a10',
 		xAxis3D: {
+			min: - 6,
+			max: 6,
 			type: 'value',
 			axisLine: {
 				lineStyle: {
@@ -36,6 +38,8 @@
 			},
 		},
 		yAxis3D: {
+			min: - 6,
+			max: 6,
 			type: 'value',
 			axisLine: {
 				lineStyle: {
@@ -44,6 +48,8 @@
 			},
 		},
 		zAxis3D: {
+			min: - 6,
+			max: 6,
 			type: 'value',
 			axisLine: {
 				lineStyle: {
@@ -56,7 +62,7 @@
 		visualMap: {
 			show: false,
 			dimension: 2,
-			min: -5,
+			min: - 5,
 			max: 5,
 			inRange: {
 				color: [
@@ -81,12 +87,12 @@
 				u: {
 					min: 0,
 					max: Math.PI,
-					step: Math.PI / 16
+					step: Math.PI / 32
 				},
 				v: {
 					min: -Math.PI,
 					max: Math.PI,
-					step: Math.PI / 16
+					step: Math.PI / 32
 				},
 				x: function (u, v) {
 					return 5 * Math.sin(u) * Math.sin(v);
