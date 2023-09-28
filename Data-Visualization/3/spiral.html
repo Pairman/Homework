@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+</head>
+
+<title>
+	Spiral Curve
+</title>
+
+<body style="background-color: #060a10">
+	<p align="center">
+		<B style="color: #ffffff; font-size:18px; font-family: sans-serif">
+			Spiral Curve
+		</B>
+		<div id="main">
+		</div>
+	</p>
+</body>
+
+<script type="text/javascript">
+	
+	var data = [];
+	for (var t = 0; t < 20 * Math.PI; t += 0.001) {
+		var x = 5 * Math.cos(t);
+		var y = 5 * Math.sin(t);
+		var z = t / 2;
+		data.push([x, y, z]);
+	}
+
+	document.getElementById('main').setAttribute('style', 'width: ' + (window.innerWidth - 28) .toString() + 'px; height: ' + (window.innerHeight - 76).toString()+ 'px;');
+	var myChart = echarts.init(document.getElementById('main'));
+
+	option = {
+		backgroundColor: '#060a10',
+		xAxis3D: {
+			type: 'value',
+			axisLine: {
+				lineStyle: {
+					color: '#ffffff'
+				}
+			},
+		},
+		yAxis3D: {
+			type: 'value',
+			axisLine: {
+				lineStyle: {
+					color: '#ffffff'
+				}
+			},
+		},
+		zAxis3D: {
+			type: 'value',
+			axisLine: {
+				lineStyle: {
+					color: '#ffffff'
+				}
+			},
+		},
+		grid3D: {},
+		tooltip: {},
+		visualMap: {
+			show: false,
+			dimension: 2,
+			min: 0,
+			max: 10 * Math.PI,
+			inRange: {
+				color: [
+					'#313695',
+					'#4575b4',
+					'#74add1',
+					'#abd9e9',
+					'#e0f3f8',
+					'#ffffbf',
+					'#fee090',
+					'#fdae61',
+					'#f46d43',
+					'#d73027',
+					'#a50026'
+				]
+			}
+		},
+		series: {
+			type: 'line3D',
+			data: data,
+			lineStyle: {
+				width: 8
+			}
+		}
+	};
+
+	myChart.setOption(option);
+</script>

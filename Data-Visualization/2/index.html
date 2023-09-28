@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+	<script src='daily-minimum-temperatures-in-me.js'></script>
+</head>
+
+<title>
+	Daily minimum temperatures in Melbourne, Australia from 1981 to 1990
+</title>
+
+<body style="background-color: #060a10">
+	<p align="center">
+		<B style="color: #ffffff; font-size:18px; font-family: sans-serif">
+			Daily minimum temperatures in Melbourne, Australiafrom 1981 to 1990
+		</B>
+		<div id="main">
+		</div>
+	</p>
+</body>
+
+<script type="text/javascript">
+	document.getElementById('main').setAttribute('style', 'width: ' + (window.innerWidth - 28) .toString() + 'px; height: ' + (window.innerHeight - 76).toString()+ 'px;');
+
+	var myChart = echarts.init(document.getElementById('main'));
+
+	var option = {
+		grid3D: {
+			environment: '#060a10',
+			boxDepth: 320,
+			boxWidth: 120,
+			boxHeight: 160,
+			light: {
+				main: {
+					shadow: true,
+					quality: 'ultra',
+					intensity: 1
+				}
+			}
+		},
+		tooltip: {},
+		xAxis3D: {
+			name: 'Year',
+			axisLine: {
+				lineStyle: {
+					color: '#ffffff'
+				}
+			},
+			type: 'value',
+			min: 1981,
+			interval: 1
+		},
+		yAxis3D: {
+			name: 'Month and Day',
+			axisLine: {
+				lineStyle: {
+					color: '#ffffff'
+				}
+			},
+			type: 'category',
+			nameGap: 40
+		},
+		zAxis3D: {
+			name: 'Temperature',
+			axisLine: {
+				lineStyle: {
+					color: '#ffffff'
+				}
+			},
+			max: 27,
+			interval: 1
+		},
+		visualMap: {
+			max: 26.3,
+			min: 0.3,
+			dimension: 'Temperature',
+			inRange: {
+				color: [
+					'#000061',
+					'#00558a',
+					'#00b312',
+					'#dbd000',
+					'#f28d00',
+					'#f50c00',
+					'#ff0000'
+				]
+			},
+		},
+		dataset: {
+			dimensions: [
+				'Year',
+				'Month and Day',
+				'Temperature'
+			],
+			source: data
+		},
+		series: [
+			{
+				name: 'Daily minimum temperature',
+				type: 'bar3D',
+				shading: 'realistic',
+				encode: {
+					x: 'Year',
+					y: 'Month and Day',
+					z: 'Temperature',
+					tooltip: [0, 1, 2]
+				}
+			}
+		]
+	};
+
+	myChart.setOption(option);
+</script>
