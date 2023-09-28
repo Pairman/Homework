@@ -50,6 +50,7 @@
 			},
 		},
 		zAxis3D: {
+			max: 0.2,
 			type: 'value',
 			axisLine: {
 				lineStyle: {
@@ -57,12 +58,13 @@
 				}
 			},
 		},
+		tooltip: {},
 		grid3D: {},
 		visualMap: {
 			show: false,
 			dimension: 2,
-			min: 0,
-			max: 0.16,
+			min: gaussian(0, 0, 4, 4, 1, 1, 0),
+			max: gaussian(0, 0, 0, 0, 1, 1, 0),
 			inRange: {
 				color: [
 				'#313695',
@@ -100,7 +102,7 @@
 					return v;
 				},
 				z: function (u, v) {
-					return gaussian(u, v, 0, 0, 1, 1, 0.6505);
+					return gaussian(u, v, 0, 0, 1, 1, 0);
 				}
 			}
 		}
