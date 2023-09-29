@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+	<script src="https://www.makeapie.cn/dep/echarts/map/js/china.js"></script>
+	<script src="c:\Users\Pairman\Desktop\Data Visualization\4\task2_sumup_byprovmap.js"></script>
+</head>
+
+<title>
+	COVID-19: Comfirmed Cases per Province on Map by Date
+</title>
+
+<body style="background-color: #060a10">
+	<p align="center">
+		<B style="color: #ffffff; font-size:18px; font-family: sans-serif">
+			COVID-19: Comfirmed Cases per Province on Map
+		</B>
+		<br>
+		<B id="title_updateTime" style="color: #ffffff; font-size:28px; font-family: sans-serif">
+			2020/04/01
+		</B>
+		<div id="main">
+		</div>
+	</p>
+</body>
+
+<script type="text/javascript">
+	document.getElementById('main').setAttribute('style', 'width: ' + (window.innerWidth - 28) .toString() + 'px; height: ' + (window.innerHeight - 76).toString()+ 'px;');
+	var myChart = echarts.init(document.getElementById('main'));
+	var played = 1;
+
+	option = {
+		backgroundColor: '#060a10',
+		tooltip: {},
+		visualMap: {
+			show: true,
+			is_piecewise: true,
+			pieces: [
+				{min: 0, max: 9, label: "0-9", color: '#00cc20'},
+				{min: 10, max: 99, label: "10-99", color: '#77bb10'},
+				{min: 100, max: 999, label: "100-999", color: '#b0dd00'},
+				{min: 1000, max: 9999, label: "1000-9999", color: '#dbd000'},
+				{min: 10000, max: 99999, label: "10000-99999", color: '#f28d00'},
+				{min: 100000, max: 999999, label: "100000-999999", color: '#f50c00'},
+				{min: 1000000, max: 9999999, label: "1000000-9999999", color: '#ff0000'},
+			],
+		},
+		series: {
+			name: 'Comfirmed Cases by 2020/04/01',
+			type: 'map',
+			mapType: 'china',
+			label: {
+				fontSize: 14,
+				color: '#ddddff',
+				textBorderColor: '#113355',
+				textBorderWidth: 2,
+				show: true
+			},
+			data: data[1][1]
+		},
+		animationDuration: 0,
+		animationDurationUpdate: 160,
+		animationEasing: 'linear',
+		animationEasingUpdate: 'linear'
+	};
+
+function play() {
+	if (!played)
+		return;
+	played = 0;
+	for (var i = 2; i < data.length; ++i) {
+		(function (i) {
+			setTimeout(function () {
+				updateData(i);
+			}, i * 160);
+		})(i);
+	}
+	setTimeout(function () {
+		played = 1;
+	}, data.length * 160);
+}
+
+function updateData(i) {
+	document.getElementById("title_updateTime").innerText = data[i][0];
+	option.series.data = data[i][1];
+	myChart.setOption(option);
+}
+
+play();
+</script>
