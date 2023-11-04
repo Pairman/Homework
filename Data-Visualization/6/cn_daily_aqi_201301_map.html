@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+	<script src="https://www.makeapie.cn/dep/echarts/map/js/china.js"></script>
+	<script src="https://homework.git.pnxlr.eu.org/Data-Visualization/6/csv/CN-AQI-daily-201301.js"></script>
+</head>
+
+<title>
+	CN AQI Daily on Map
+</title>
+
+<body style="background-color: #060a10">
+	<p align="center">
+		<B style="color: #ffffff; font-size:18px; font-family: sans-serif">
+			CN AQI Daily on Map
+		</B>
+		<br>
+		<B id="title_datetime" style="color: #ffffff; font-size:28px; font-family: sans-serif">
+			2013-01-01
+		</B>
+		<div id="main">
+		</div>
+	</p>
+	<div>
+		<button style="width:4.5%" onclick="play()">Play</button>
+		<button style="width:4.5%" onclick="stop()">Stop</button>
+		<input id="range" type="range" value="0" min="0" max="30" step="1" style="width:86%" onchange="loadDatetime(datetimeStrs[this.value])" oninput="this.nextElementSibling.innerText = datetimeStrs[this.value].slice(5)">
+		<output id="range_output" style="color: #ffffff; font-family: sans-serif">01-01</output>
+	</div>
+</body>
+
+<script type="text/javascript">
+	document.getElementById('main').setAttribute('style', 'width: ' + (window.innerWidth - 28) .toString() + 'px; height: ' + (window.innerHeight - 144).toString()+ 'px;');
+	var myChart = echarts.init(document.getElementById('main'));
+	var played = 1;
+
+	option = {
+		backgroundColor: '#060a10',
+		tooltip: {},
+		visualMap: {
+			show: true,
+			is_piecewise: true,
+			pieces: [
+				{min: 0, max: 50, label: "Good (0-50)", color: '#008000'},
+				{min: 51, max: 100, label: "Moderate (51-100)", color: '#ffff00'},
+				{min: 101, max: 150, label: "Unhealthy for Sensitive Groups (101-150)", color: '#ffa500'},
+				{min: 151, max: 200, label: "Unhealthy (151-200)", color: '#ff0000'},
+				{min: 201, max: 300, label: "Very Unhealthy (201-300)", color: '#800080'},
+				{min: 300, max: 9999999999, label: "Hazardous (301-500)", color: '#800000'}
+			]
+		},
+		series: {
+			name: 'CN AQI Daily',
+			type: 'map',
+			mapType: 'china',
+			label: {
+				fontSize: 14,
+				color: '#ddddff',
+				textBorderColor: '#113355',
+				textBorderWidth: 2,
+				show: true
+			},
+			data: data[0][1]
+		}
+	};
+
+var datetimeStrs = new Array();
+var data_dict = {};
+for (let i in data) {
+	datetimeStrs.push(data[i][0])
+	data_dict[data[i][0]] = data[i][1];
+}
+
+function loadDatetime(datetimeStr) {
+	document.getElementById("title_datetime").innerText = datetimeStr;
+	option.series.data = data_dict[datetimeStr];
+	myChart.setOption(option);
+}
+
+loadDatetime(datetimeStrs[0]);
+
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+var playing = 0;
+
+var play = async function() {
+	if (playing)
+		return;
+	playing = 1;
+	for (let i = document.getElementById("range").value; i < datetimeStrs.length; ++i) {
+		if (!playing)
+			break;
+		loadDatetime(datetimeStrs[i]);
+		document.getElementById("range").value = i;
+		document.getElementById("range_output").innerText = datetimeStrs[i].slice(5);
+		await sleep(500);
+	}
+	if (document.getElementById("range").value == 30)
+		document.getElementById("range").value = 0;
+	playing = 0;
+}
+
+function stop() {
+	playing = 0;
+}
+</script>
