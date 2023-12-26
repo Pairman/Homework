@@ -7,7 +7,7 @@ EPSILON, INFINITY = 0.000001, float("inf")
 class IndexMinPQ:
 	def __init__(self, max_size):
 		self.max_size, self.size = max_size, 0
-		self.keys = {i: None for i in range(self.max_size + 1)}
+		self.keys = [None for i in range(self.max_size + 1)]
 		self.arr = [0 for i in range(self.max_size + 1)]
 		self.onq = [-1 for i in range(self.max_size + 1)]
 
