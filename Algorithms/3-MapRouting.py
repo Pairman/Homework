@@ -103,8 +103,8 @@ class DijkstraSP:
 		self.pq = IndexMinPQ(G.V)
 		self.pq.push(s, self.distto[s])
 		while self.pq:
-			# if self.distto[d] < INFINITY:
-			# 	break
+			if self.distto[d] < INFINITY:
+				break
 			v = self.pq.pop()
 			self.relax(G, v)
 
@@ -114,8 +114,8 @@ class DijkstraSP:
 	def relax(self, G: Map, v):
 		for e in G.adj[v]:
 			w = e.other(v)
-			if self.distto[w] > (dist := self.distto[v] + e.weight):
-			# if self.distto[w] - EPSILON > (dist := self.distto[v] + e.weight + G.geodist(w, self.d) - G.geodist(v, self.d)):
+			# if self.distto[w] > (dist := self.distto[v] + e.weight):
+			if self.distto[w] - EPSILON > (dist := self.distto[v] + e.weight + G.geodist(w, self.d) - G.geodist(v, self.d)):
 				self.distto[w] = dist
 				self.edgeto[w] = e
 				if self.pq.has(w):
