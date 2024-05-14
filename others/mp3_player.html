@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
+		<title>Soundbox</title>
+	</head>
+
+	<body>
+		<input type="file" onchange="load_files(this)" webkitdirectory>
+		<br>
+		<button id="play-button" onclick="play()">Play</button>
+		<div id="playing-div"></div>
+		<br>
+		<div id="file-list-div"></div>
+
+		<script>
+			let fpaths = [], fnames = [];
+			let durations = [3, 5, 10, 20];
+			let audio = new Audio();
+
+			async function sleep(ms) {
+				return new Promise(resolve => setTimeout(resolve, ms));
+			}
+
+			function format_time(time) {
+				let m = Math.floor(time / 60);
+				let s = Math.floor(time % 60);
+				m = `${m < 10 ? '0' : ''}${m}`;
+				s = `${s < 10 ? '0' : ''}${s}`;
+				return `${m}:${s}`;
+			}
+
+			function select_durations() {
+				return durations[Math.floor(Math.random() * durations.length)];
+			}
+
+			async function load_files(e) {
+				let files = e.files;
+				let div = document.getElementById("file-list-div")
+				for (let i = 0; i < files.length; ++i) {
+					if (!files[i].name.endsWith(".mp3"))
+						continue;
+					fnames.push(files[i].name);
+					fpaths.push(files[i].webkitRelativePath);
+					div.innerHTML += files[i].name + "<br>";
+				}
+			}
+
+			async function update_playing_div(fname, start, end) {
+				let e = document.getElementById("playing-div");
+				start = format_time(start);
+				end = format_time(end);
+				e.innerText = `Now Playing: ${fname} (${start}~${end})`;
+			}
+
+			async function play_random() {
+				let i = Math.floor(Math.random() * fpaths.length);
+				let fpath = fpaths[i], fname = fnames[i];
+				let duration = select_durations();
+				audio.src = encodeURI(fpath);
+				audio.onloadedmetadata = () => {
+					let time = Math.random() * (audio.duration - duration);
+					audio.currentTime = time;
+					audio.play();
+					update_playing_div(fname, time, time + duration);
+				};
+				await sleep(duration * 1000);
+			}
+
+			async function play() {
+				if (!play.calling && fpaths.length) {
+					play.calling = true;
+					document.getElementById("play-button").innerText = "Stop";
+					while (play.calling)
+						await play_random();
+				}
+				else {
+					audio.pause();
+					document.getElementById("play-button").innerText = "Play";
+					document.getElementById("playing-div").innerText = "";
+					play.calling = false;
+				}
+			}
+		</script>
+	</body>
+</html>
