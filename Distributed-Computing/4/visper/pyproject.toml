@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Visper"
+version = "0.0.1"
+authors = [{name = "Pairman", email = "pairmanxlr@gmail.com"}]
+readme = "README.md"
+description = "Visper: a P2P messenger."
+license = {text = "GNU General Public License v3 (GPLv3)"}
+keywords = ["visper", "messenger", "chat", "p2p", "decentralized"]
+classifiers = [
+	"Programming Language :: Python :: 3",
+	"License :: OSI Approved :: GNU General Public License (GPL)",
+]
+requires-python = ">=3.8"
+dependencies = ["websockets", "aiorwlock", "protobuf"]
+
+[project.urls]
+Homepage = "https://github.com/Pairman"
+
+[project.scripts]
+visper = "visper.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = [
+	"visper*",
+	"visper.core*",
+	"visper.fs*",
+	"visper.net*",
+	"visper.ui*",
+	"visper.util*",
+]
+
+[tool.setuptools.package-data]
+"visper" = ["res/*"]
+
